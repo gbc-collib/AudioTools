@@ -1,8 +1,24 @@
 ﻿using System;
 using System.Diagnostics;
-
+using System.Text;
+//Test Audio file at
+///Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/PinkPanther30.wav
 namespace AudioTools
 {
+    public static class ByteUtils
+    {
+        static short LittleEndianBytesToShort(byte[] data, int index)
+        {
+            return (short)((data[index + 1] << 8) | data[index]);
+        }
+        static byte[] FloattoLittleEndianBytes(short data)
+        {
+            byte[] bytes = new byte[2]; //A short is 16 bits so it can always be represented in 2 bytes
+            bytes[0] = (byte)data;
+            bytes[1] = (byte)(data >> 8 & 0xFF);
+            return bytes;
+        }
+    }
     public class AudioFileHandler
     {
         //backing fields
@@ -29,13 +45,12 @@ namespace AudioTools
         {
             Console.WriteLine("Type your audio file name to be opened");
             FileName = Console.ReadLine();
-            Console.WriteLine(FileName);
-            ReadWavTo(FileName, out float[] L, out float[] R);
+            ReadWavToFloat(FileName, out float[] L, out float[] R);
             Left = L;
             Right = R;
 
         }
-        static bool ReadWavTo(string filename, out float[] L, out float[] R)
+        static bool ReadWavToFloat(string filename, out float[] L, out float[] R)
         {
             L = R = null;
 
@@ -132,6 +147,10 @@ namespace AudioTools
                 Console.WriteLine("Failed to load" + filename);
                 return false;
             }
+        }
+        static bool FloatToWav(string filename, out float[] audiodata)
+        {
+            
         }
     }
 }
