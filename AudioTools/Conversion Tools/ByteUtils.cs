@@ -21,34 +21,42 @@ namespace AudioTools
             bytes[1] = (byte)(data >> 8 & 0xFF);
             return bytes;
         }
-    }
-    public static class AudioFileUtils
-    {
+
         public static float[] ByteArrayToFloat(byte[] byteArray, int inputBitRate, int floatLen, int dataLen)
         {
             float[] asFloat = new float[floatLen];
             switch (inputBitRate)
             {
                 case 64:
-                    double[]
-                        asDouble = new double[floatLen];
-                    Buffer.BlockCopy(byteArray, 0, asDouble, 0, dataLen);
-                    asFloat = Array.ConvertAll(asDouble, e => (float)e);
-                    break;
+                    {
+                        double[]
+                                            asDouble = new double[floatLen];
+                        Buffer.BlockCopy(byteArray, 0, asDouble, 0, dataLen);
+                        asFloat = Array.ConvertAll(asDouble, e => (float)e);
+                        break;
+                    }
                 case 32:
-                    Buffer.BlockCopy(byteArray, 0, asFloat, 0, dataLen);
-                    break;
+                    {
+                        Buffer.BlockCopy(byteArray, 0, asFloat, 0, dataLen);
+                        break;
+                    }
                 case 16:
-                    Int16[] asInt16 = new Int16[floatLen];
-                    Buffer.BlockCopy(byteArray, 0, asInt16, 0, dataLen);
-                    asFloat = Array.ConvertAll(asInt16, e => e / (float)(Int16.MaxValue + 1));
-                    break;
+                    {
+                        Int16[] asInt16 = new Int16[floatLen];
+                        Buffer.BlockCopy(byteArray, 0, asInt16, 0, dataLen);
+                        asFloat = Array.ConvertAll(asInt16, e => e / (float)(Int16.MaxValue + 1));
+                        break;
+                    }
+
+                default:
+                    throw new Exception("Unexpected Case");
             }
             return asFloat;
         }
         public static byte[] ConvertTo32Bit(float[] samples, int startingByteRate, int dataLen)
         {
             byte[] Byte32Array = new byte[dataLen];
+            throw new NotImplementedException();
             return Byte32Array;
         }
     }

@@ -4,133 +4,49 @@ using System.Runtime.InteropServices;
 
 namespace AudioTools
 {
-    public class WavData : AudioData
+    public class WavData : IAudioData
     {
-        public WavData() : this(Console.ReadLine())
+        private string _filename = String.Empty;
+        public Dictionary<string, int> HeaderData { get; set; } = new Dictionary<string, int>();
+        public byte[] RawHeader { get; set; } = Array.Empty<byte>();
+        public string FileName
         {
-            FileType = "Wave";
-        }
-        public WavData(string filename) : base(filename)
-        {
-            FileType = "Wave";
-            LoadWav();
-        }
-        public bool LoadWav()
-        {
-            Left = Right = null;
-            //Check header for valid WAV file
-            try
+            get
             {
-                using FileStream fs = File.Open(FileName, FileMode.Open);
-                BinaryReader reader = new(fs);
-                LoadHeader(reader);
-
-                // Load DATA!
-                byte[] byteArray = reader.ReadBytes(HeaderData["bytes"]);
-
-                SampleLength = HeaderData["bitDepth"] / 8;
-                int nValues = HeaderData["bytes"] / SampleLength;
-                float[] asFloat = AudioFileUtils.ByteArrayToFloat(byteArray, HeaderData["bitDepth"], nValues, HeaderData["bytes"]);
-                switch (HeaderData["channels"])
-                {
-                    case 1:
-                        Left = asFloat;
-                        Right = null;
-                        Samples = Left;
-                        return true;
-                    case 2:
-                        // de-interleave
-                        int nSamps = nValues / 2;
-                        Left = new float[nSamps];
-                        Right = new float[nSamps];
-                        for (int s = 0, v = 0; s < nSamps; s++)
-                        {
-                            Left[s] = asFloat[v++];
-                            Right[s] = asFloat[v++];
-                        }
-                        Samples = asFloat;
-                        return true;
-                    default:
-                        return false;
-                }
+                return _filename;
             }
-            catch (FileNotFoundException)
+            set
             {
-                //Debug.Log("...Failed to load: " + filename);
-                Console.WriteLine("Failed to load" + FileName);
-                return false;
+                if (value == String.Empty || value == null)
+                { throw new Exception("Filename Cannot be null type"); }
             }
         }
-        public void LoadHeader(BinaryReader reader)
+        public float[] Left { get; set; }
+        public float[]? Right { get; set; }
+        public int SampleRate { get; set; }
+        public int SampleLength { get; set; }
+        public float[] Samples { get; set; }
+        public string FileType { get; set; } = "Wave";
+        public WavData()
         {
-            RawHeader = reader.ReadBytes(44);
-            reader.BaseStream.Position = 0;
-
-
-            // chunk 0
-            HeaderData.Add("chunkID", reader.ReadInt32());
-            HeaderData.Add("fileSize", reader.ReadInt32());
-            HeaderData.Add("riffType", reader.ReadInt32());
-
-
-            // chunk 1
-            HeaderData.Add("fmtID", reader.ReadInt32());
-            HeaderData.Add("fmtSize", reader.ReadInt32()); // bytes for this chunk (expect 16 or 18)
-
-            // 16 bytes coming...
-            HeaderData.Add("fmtCode", reader.ReadInt16());
-            HeaderData.Add("channels", reader.ReadInt16());
-            SampleRate = reader.ReadInt32();
-            HeaderData.Add("sampleRate", SampleRate);
-            HeaderData.Add("byteRate", reader.ReadInt32());
-            HeaderData.Add("fmtBlockAlign", reader.ReadInt16());
-            HeaderData.Add("bitDepth", reader.ReadInt16());
-
-            if (HeaderData["fmtSize"] == 18)
-            {
-                // Read any extra values
-                HeaderData.Add("fmtExtraSize", reader.ReadInt16());
-                reader.ReadBytes(HeaderData["fmtExtraSize"]);
-            }
-
-            // chunk 2
-            HeaderData.Add("dataID", reader.ReadInt32());
-            HeaderData.Add("bytes", reader.ReadInt32());
+            FileName = Console.ReadLine();
+            LoadFile();
         }
-        public void Format16BitTo32BitWav()
+        public WavData(string filename)
         {
-            if (HeaderData["bitDepth"] > 16) { return; }
-            //Reformat header file for 32 bit
+            FileName = filename;
+            LoadFile();
         }
-        public bool PackFloatToWav(string fileNameOut)
+        /*Calls function from WAV utilities folder to keep file nice and short
+         * LoadFile is protected because this method should only be called once when the object is initialized
+         * If Another file needs to load create a new instance of the class */
+        protected void LoadFile()
         {
-            byte[] wavAsBytes = new byte[8 + HeaderData["fileSize"]];
-            //Put Header in bytearray first
-            Buffer.BlockCopy(RawHeader, 0, wavAsBytes, 0, RawHeader.Length);
-            //Switch to handle re-encoding at differnet bitrates
-            switch (HeaderData["bitDepth"])
-            {
-                case 16:
-                    //Convert Float(32 bits) back to Int16s
-                    short[] shortSamples = new short[Samples.Length];
-                    for(int i=0; i < Samples.Length; i++)
-                    {
-                        shortSamples[i] = (short)Math.Floor(Samples[i] * 32767);
-                    }
-                    Buffer.BlockCopy(shortSamples, 0, wavAsBytes, RawHeader.Length, HeaderData["bytes"]);
-                    Console.WriteLine("CONVETED TIME TO WRITE");
-                    //Write byte array to file
-                    File.WriteAllBytes(fileNameOut, wavAsBytes);
-                    return true;
-                case 32:
-                    Buffer.BlockCopy(Samples, 0, wavAsBytes, RawHeader.Length, HeaderData["bytes"]);
-                    return true;
-                case 64:
-                    double[] sampleAsDouble = Array.ConvertAll(Samples,e=> (double)e);
-                    Buffer.BlockCopy(Samples, 0, wavAsBytes, RawHeader.Length, HeaderData["bytes"]);
-                    return true;
-            }
-            return false;
+            WavReader.LoadWav(this);
+        }
+        public void SaveFile(string fileout)
+        {
+            WavDumper.PackSamplesToWav(this, fileout);
         }
     }
 }
