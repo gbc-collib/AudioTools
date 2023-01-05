@@ -1,7 +1,7 @@
 ### AudioTools
 ## A C# library for loading audiofiles, converting their bitrates, and applying effects to them. The library is organized sub-directories for seperate functions for reading, saving, and editing wav files
 
-## Distortion 
+## OverDrive Distortion Process
 #AmplifySignal: 
 This step increases the gain or volume of the audio signal, which can make the sound louder and potentially create distortion if the gain is set too high.
 
