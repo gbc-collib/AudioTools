@@ -6,7 +6,7 @@ namespace AudioTools
 {
     public class WavData : IAudioData
     {
-        private string _filename = String.Empty;
+        private string _filename;
         public Dictionary<string, int> HeaderData { get; set; } = new Dictionary<string, int>();
         public byte[] RawHeader { get; set; } = Array.Empty<byte>();
         public string FileName
@@ -17,8 +17,9 @@ namespace AudioTools
             }
             set
             {
-                if (value == String.Empty || value == null)
+                if (String.IsNullOrEmpty(value) == true)
                 { throw new Exception("Filename Cannot be null type"); }
+                _filename = value;
             }
         }
         public float[] Left { get; set; }

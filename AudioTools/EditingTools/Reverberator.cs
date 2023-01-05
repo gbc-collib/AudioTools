@@ -4,7 +4,7 @@ namespace AudioTools
     public static class Reverberator
     {
 
-        public static void Reverb(IAudioData audioFile, float delay, float decay, int mixPercent)
+        public static void SchroederReverb(IAudioData audioFile, float delay, float decay, int mixPercent)
         {
             //4 parallel combfilters
             float[] combFilterSamples1 = CombFilter(audioFile.Samples, audioFile.Samples.Length, delay, decay, audioFile.SampleRate);

@@ -10,18 +10,23 @@ namespace AudioTools
 {
     public static class ByteUtils
     {
+        //Converts an array of Little Endian Bytes to a short int value
         static short LittleEndianBytesToShort(byte[] data, int index)
         {
             return (short)((data[index + 1] << 8) | data[index]);
         }
-        static byte[] FloattoLittleEndianBytes(short data)
+        //Converts short to Little endian byte 
+        static byte[] ShorttoLittleEndianBytes(short data)
         {
             byte[] bytes = new byte[2]; //A short is 16 bits so it can always be represented in 2 bytes
             bytes[0] = (byte)data;
             bytes[1] = (byte)(data >> 8 & 0xFF);
             return bytes;
         }
-
+        //All of these cases will return a float data type representing byte array
+        //We use float to add precision to calculations as testing using integers proved that
+        //the rounding causes distortion in the final product
+        //Support for 16, 32, 64 bit .wavs is currently implemented
         public static float[] ByteArrayToFloat(byte[] byteArray, int inputBitRate, int floatLen, int dataLen)
         {
             float[] asFloat = new float[floatLen];
@@ -43,21 +48,16 @@ namespace AudioTools
                 case 16:
                     {
                         Int16[] asInt16 = new Int16[floatLen];
+                        //Block Copy handles our conversion from bytes to in16
                         Buffer.BlockCopy(byteArray, 0, asInt16, 0, dataLen);
                         asFloat = Array.ConvertAll(asInt16, e => e / (float)(Int16.MaxValue + 1));
                         break;
                     }
 
                 default:
-                    throw new Exception("Unexpected Case");
+                    throw new Exception("Unexpected Case try using a wav of 16, 32, 64 bit rate");
             }
             return asFloat;
-        }
-        public static byte[] ConvertTo32Bit(float[] samples, int startingByteRate, int dataLen)
-        {
-            byte[] Byte32Array = new byte[dataLen];
-            throw new NotImplementedException();
-            return Byte32Array;
         }
     }
 }

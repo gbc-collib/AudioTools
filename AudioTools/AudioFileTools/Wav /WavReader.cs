@@ -5,6 +5,7 @@ namespace AudioTools
 {
 	public static class WavReader
 	{
+
         public static void LoadHeader(WavData WavObject, BinaryReader reader)
         {
             WavObject.RawHeader = reader.ReadBytes(44);
@@ -40,7 +41,9 @@ namespace AudioTools
             // chunk 2
             WavObject.HeaderData.Add("dataID", reader.ReadInt32());
             WavObject.HeaderData.Add("bytes", reader.ReadInt32());
+
         }
+
         public static bool LoadWav(WavData WavObject)
         {
             WavObject.Left = WavObject.Right = null;
