@@ -4,8 +4,8 @@ using System.Collections;
 
 namespace AudioTools
 {
-	public class AudioData
-	{
+    abstract public class AudioData
+    {
         private string _filename = string.Empty;
         public string FileName
         {
@@ -26,16 +26,37 @@ namespace AudioTools
         public int SampleRate { get; set; } = 0;
         public int SampleLength { get; set; }
         public float[] Samples { get; set; } = Array.Empty<float>();
-        public Dictionary<string, int> HeaderData { get; set; } = new Dictionary<string, int>();
-        public AudioData()
-		{
-            Console.WriteLine("Write File name");
-            FileName = Console.ReadLine();
-            AudioFileHandler.ReadWavToFloat(this);
-            Samples = Left;
-            //Reverberator.Reverb(this, );
+        public byte[] RawHeader { get; set; } = Array.Empty<byte>();
+        public string FileType { get; set; } = String.Empty;
 
+        public Dictionary<string, int> HeaderData { get; set; } = new Dictionary<string, int>();
+
+        public AudioData() : this(Console.ReadLine())
+        {
+            Console.WriteLine("Enter Filename:");
         }
-	}
+        public AudioData(string filename)
+        {
+            FileName = filename;
+            if (FileType == String.Empty)
+            {
+                return;
+            }
+            GetFileForm();
+        }
+        public void GetFileForm()
+        {
+            switch(Path.GetExtension(FileName))
+            {
+                case ".wav":
+                    FileType = "Wave";
+
+                    return;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+    }
 }
 

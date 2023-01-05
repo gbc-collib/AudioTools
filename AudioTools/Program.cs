@@ -8,9 +8,11 @@ namespace AudioTools
     {
         static void Main()
         {
+            
             Console.WriteLine("Hello World!");
-            AudioData MusicFile = new();
-            AudioFileHandler.PackFloatToWav("Reverbed.wav", MusicFile);
+            WavData MusicFile = new("/Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/PinkPanther30.wav");
+            Reverberator.Reverb(MusicFile, 152, 0.15f, 100);
+            MusicFile.PackFloatToWav("/Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/Reverbed.wav");
         }
     }
     
