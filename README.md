@@ -2,8 +2,8 @@
 ## A C# library for loading audiofiles, converting their bitrates, and applying effects to them. The library is organized sub-directories for seperate functions for reading, saving, and editing wav files
 
 ## OverDrive Distortion Process
-#AmplifySignal: 
-This step increases the gain or volume of the audio signal, which can make the sound louder and potentially create distortion if the gain is set too high.
+# AmplifySignal: 
+This step increases the gain or volume of the audio signal, which can make the sound louder and potentially create distortion if the gain is set too high. Similar to to turning gain knob on an analog amp.
 
 # ButtersworthLowPassFilter: 
 This is a type of low-pass filter that attenuates frequencies above a certain cutoff frequency, allowing lower frequencies to pass through. This can help to smooth out the sound and reduce harshness, which can be useful for creating a distortion effect.
