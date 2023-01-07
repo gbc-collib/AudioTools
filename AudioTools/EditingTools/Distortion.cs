@@ -15,16 +15,19 @@ Use an equalization (EQ) curve to fine-tune the frequency response of the distor
     */
     public static class Distortion
     {
+        //Our first type of distortion being implemented to get that classic 90s punk sound
         public static void OverdriveDistortion(IAudioData audioFile, float gain, float lowPassCutoff, float highPassCutoff)
         {
             float[] output = new float[audioFile.Samples.Length];
+            output = ApplyNoiseGate(output, -10, 100, audioFile.SampleRate);
             output = AmplifySignal(audioFile.Samples, gain);
-            output = ButtersworthLowPassFilter(output, 3, lowPassCutoff, audioFile.SampleRate);
-            output = SoftClipShaper(output);
             output = ButtersworthHighPassFilter(output, 3, highPassCutoff, audioFile.SampleRate);
-            //output = ApplyNoiseGate(output, 400, 600, audioFile.SampleRate);
+            output = SoftClipShaper(output);
+            output = ButtersworthLowPassFilter(output, 3, lowPassCutoff, audioFile.SampleRate);
+            //output = ApplyNoiseGate(output, 1, 2, audioFile.SampleRate);
             audioFile.Samples = output;
         }
+        //First step is to just amplify signal uniformly
         public static float[] AmplifySignal(float[] input, float gain)
         {
             float[] output = new float[input.Length];
@@ -35,6 +38,18 @@ Use an equalization (EQ) curve to fine-tune the frequency response of the distor
             }
             return output;
         }
+        /*The noise gate function works by comparing the envelope of the input 
+         * signal (a smoothed version of the absolute value of the signal) to 
+         * a threshold. When the envelope is above the threshold, the gate is 
+         * open and the input signal is passed through unmodified. When the 
+         * envelope is below the threshold, the gate is closed and the output 
+         * is set to zero. The attack and release parameters control how quickly 
+         * the gate responds to
+         * changes in the input signal. The attack parameter determines how
+         * quickly the gate opens when the envelope rises above the threshold,
+         * and the release parameter determines how quickly the gate closes when
+         * the envelope falls below the threshold.
+         */
         public static float[] ApplyNoiseGate(float[] input, float threshold, float timeConstant, int sampleRate)
         {
             int length = input.Length;
@@ -68,11 +83,12 @@ Use an equalization (EQ) curve to fine-tune the frequency response of the distor
 
             return output;
         }
-        //The buttersworth function is used to roll high end off audio
+        //The buttersworth low filter function is used to roll high end off audio
         //The order parameter referrs to how many 'poles' the function will have
         //Higher order filters will be more computationally intense but they will have steeper roll off
         //Differential equation for buttersworth filter is
         //y[n] = b[0]*x[n] + b[1]*x[n-1] + ... + b[M]*x[n-M] - a[1]*y[n-1] - ... - a[N]*y[n-N]
+        //Translated into code we get the following function
         public static float[] ButtersworthLowPassFilter(float[] input, int order,
             float cutOffFrequency, float sampleRate)
         {
@@ -92,6 +108,15 @@ Use an equalization (EQ) curve to fine-tune the frequency response of the distor
             }
             return output;
         }
+        /* This function calculates what is known as the coeffcients, you can
+         * think of this like a delay except the coeffcient changes how much 
+         * our previous sample will effect the current one. This function is only
+         * meant to be used in the scope of the Lowfilter as the Highfilter has
+         * different equation. I dont know the how and why of this equation besides
+         * for high level stuff but wikipedia search of butterworh contains
+         * a lot more information than I'm willing to write in this comment
+         * 
+         */
         public static void ComputeButtersWorthLowFilterCoeffcients(int order, float cutOffFrequency, float sampleRate,
             ref float[] coeffcientA, ref float[] coeffcientB)
         {
@@ -114,6 +139,10 @@ Use an equalization (EQ) curve to fine-tune the frequency response of the distor
             }
             return output;
         }
+        /* This type of distortion function is what is known as wave shaping
+         * which will just add a little controlled harshness back to the audio
+         * I used a pretty simple equation for this one but really any kind of
+         * polynomial or quardratic would work to differing effects */
         public static float[] SoftClipShaper(float[] input)
         {
             float[] output = new float[input.Length];
@@ -124,6 +153,13 @@ Use an equalization (EQ) curve to fine-tune the frequency response of the distor
             }
             return output;
         }
+        /* Ah back to Dr. Butterworth
+         * The filtering is implemented using a finite impulse response (FIR)
+         * filter structure, in which the current output sample depends on a 
+         * weighted sum of the current and past input samples and the past
+         * output samples. This is the standard approach for implementing a 
+         * digital filter.
+         */
         public static float[] ButtersworthHighPassFilter(float[] input, int order,
             float cutOffFrequency, float sampleRate)
         {
@@ -137,6 +173,7 @@ Use an equalization (EQ) curve to fine-tune the frequency response of the distor
                 for (int i = 0; i <= order; i++)
                 {
                     if (n - i >= 0)
+                        //
                         y += coeffcientB[i] * input[n - i] - coeffcientA[i] * output[n - i];
                 }
                 output[n] = y;

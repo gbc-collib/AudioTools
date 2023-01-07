@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+
 namespace AudioTools
 {
 	public static class WavDumper
@@ -41,6 +43,31 @@ namespace AudioTools
                     {
                         return false;
                     }
+            }
+        }
+        public static byte[] WriteWavWithCustomerHeader(byte[] data, int dataSize, int numChannels, int sampleRate, int bytesPerSample, int bitsPerSample)
+        {
+            // Create a MemoryStream to hold the WAV file data
+            using (MemoryStream ms = new MemoryStream())
+            {
+                // Write the WAV file header
+                ms.Write(Encoding.ASCII.GetBytes("RIFF"), 0, 4);
+                ms.Write(BitConverter.GetBytes(dataSize + 36), 0, 4);
+                ms.Write(Encoding.ASCII.GetBytes("WAVE"), 0, 4);
+                ms.Write(Encoding.ASCII.GetBytes("fmt "), 0, 4);
+                ms.Write(BitConverter.GetBytes(16), 0, 4);
+                ms.Write(BitConverter.GetBytes((short)1), 0, 2);
+                ms.Write(BitConverter.GetBytes((short)numChannels), 0, 2);
+                ms.Write(BitConverter.GetBytes(sampleRate), 0, 4);
+                ms.Write(BitConverter.GetBytes(sampleRate * numChannels * bytesPerSample), 0, 4);
+                ms.Write(BitConverter.GetBytes((short)(numChannels * bytesPerSample)), 0, 2);
+                ms.Write(BitConverter.GetBytes((short)bitsPerSample), 0, 2);
+                ms.Write(Encoding.ASCII.GetBytes("data"), 0, 4);
+                ms.Write(BitConverter.GetBytes(dataSize), 0, 4);
+                ms.Write(data, 0, dataSize);
+                byte[] bytes = ms.ToArray();
+                ms.Dispose();
+                return bytes;
             }
         }
     }

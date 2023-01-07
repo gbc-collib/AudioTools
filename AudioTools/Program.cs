@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO.Enumeration;
 using AudioTools.EditingTools;
-
 namespace AudioTools
 {
     internal class Program
@@ -14,7 +13,7 @@ namespace AudioTools
             Console.WriteLine("Loading Done");
             //Reverberator.SchroederReverb(MusicFile, 150, 0.8f, 100);
             //Console.WriteLine("Reverbing done");
-            Distortion.OverdriveDistortion(MusicFile, 10, 800, 100);
+            Distortion.OverdriveDistortion(MusicFile, 2, 500, 800);
             MusicFile.SaveFile("/Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/Reverbed.wav");
             Console.WriteLine("Saving done");
         }
