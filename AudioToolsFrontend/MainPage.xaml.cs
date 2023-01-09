@@ -1,5 +1,4 @@
 ﻿using AudioTools.AudioFileTools;
-using Microsoft.Maui;
 
 namespace AudioToolsFrontend
 {
@@ -20,10 +19,10 @@ namespace AudioToolsFrontend
                 return;
                 }
         }
-        public MainPage()
+        public MainPage(ViewModel.MainPageViewModel vm)
         {
             InitializeComponent();
-            Console.WriteLine("yolo");
+            BindingContext = vm;
         }
         private async void OnFilePickerClickedAsync(object sender, EventArgs e)
         {

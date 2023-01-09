@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace AudioToolsFrontend
+namespace AudioToolsFrontend.Platforms.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace AudioToolsFrontend
+namespace AudioToolsFrontend.Platforms.Android
 {
     [Application]
     public class MainApplication : MauiApplication

@@ -1,4 +1,6 @@
-﻿namespace AudioToolsFrontend
+﻿using AudioToolsFrontend.ViewModel;
+
+namespace AudioToolsFrontend
 {
     public static class MauiProgram
     {
@@ -12,6 +14,12 @@
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<MainPageViewModel>();
+
+            builder.Services.AddTransient<PedalBoardView>();
+            builder.Services.AddTransient<PedalBoardViewModel>();
 
             return builder.Build();
         }

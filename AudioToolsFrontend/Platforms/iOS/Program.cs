@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace AudioToolsFrontend
+namespace AudioToolsFrontend.Platforms.iOS
 {
     public class Program
     {
