@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO.Enumeration;
+﻿using AudioTools.AudioFileTools.Wav;
 using AudioTools.EditingTools;
 
 namespace AudioTools
@@ -10,12 +8,12 @@ namespace AudioTools
         static void Main()
         {
             Console.WriteLine("Hello World!");
-            WavData MusicFile = new("/Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/TestAudioFiles/PinkPanther30.wav");
+            WavData MusicFile = new(@"C:\Users\Double L\Documents\GitHub\AudioTools\AudioTools\TestAudioFiles\PinkPanther30.wav");
             Console.WriteLine("Loading Done");
-            //Reverberator.SchroederReverb(MusicFile, 150, 0.8f, 100);
+            Reverberator.SchroederReverb(MusicFile, 150, 0.8f, 100);
             //Console.WriteLine("Reverbing done");
-            Distortion.OverdriveDistortion(MusicFile, 10, 800, 100);
-            MusicFile.SaveFile("/Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/Reverbed.wav");
+            //Distortion.OverdriveDistortion(MusicFile, 10, 800, 100);
+            MusicFile.SaveFile(@"\Users\Double L\Documents\GitHub\AudioTools\AudioTools\TestAudioFiles\Reverbed.wav");
             Console.WriteLine("Saving done");
         }
     }

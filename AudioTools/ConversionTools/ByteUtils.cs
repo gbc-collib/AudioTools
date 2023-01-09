@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
-using static System.Net.Mime.MediaTypeNames;
-//Test Audio file at
+﻿//Test Audio file at
 ///Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/PinkPanther30.wav
-namespace AudioTools
+namespace AudioTools.ConversionTools
 {
     public static class ByteUtils
     {
         //Converts an array of Little Endian Bytes to a short int value
         static short LittleEndianBytesToShort(byte[] data, int index)
         {
-            return (short)((data[index + 1] << 8) | data[index]);
+            return (short)(data[index + 1] << 8 | data[index]);
         }
         //Converts short to Little endian byte 
         static byte[] ShorttoLittleEndianBytes(short data)
@@ -47,10 +41,10 @@ namespace AudioTools
                     }
                 case 16:
                     {
-                        Int16[] asInt16 = new Int16[floatLen];
+                        short[] asInt16 = new short[floatLen];
                         //Block Copy handles our conversion from bytes to in16
                         Buffer.BlockCopy(byteArray, 0, asInt16, 0, dataLen);
-                        asFloat = Array.ConvertAll(asInt16, e => e / (float)(Int16.MaxValue + 1));
+                        asFloat = Array.ConvertAll(asInt16, e => e / (float)(short.MaxValue + 1));
                         break;
                     }
 

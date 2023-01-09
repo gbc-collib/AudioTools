@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.VisualBasic.FileIO;
+﻿using AudioTools.ConversionTools;
 
-namespace AudioTools
+namespace AudioTools.AudioFileTools.Wav
 {
-	public static class WavReader
-	{
+    public static class WavReader
+    {
 
         public static void LoadHeader(WavData WavObject, BinaryReader reader)
         {

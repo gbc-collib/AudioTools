@@ -1,8 +1,4 @@
-﻿using System;
-using System.Reflection.PortableExecutable;
-using System.Runtime.InteropServices;
-
-namespace AudioTools
+﻿namespace AudioTools.AudioFileTools.Wav
 {
     public class WavData : IAudioData
     {
@@ -17,7 +13,7 @@ namespace AudioTools
             }
             set
             {
-                if (String.IsNullOrEmpty(value) == true)
+                if (string.IsNullOrEmpty(value) == true)
                 { throw new Exception("Filename Cannot be null type"); }
                 _filename = value;
             }

@@ -1,8 +1,7 @@
-﻿using System;
-namespace AudioTools
+﻿namespace AudioTools.AudioFileTools.Wav
 {
-	public static class WavDumper
-	{
+    public static class WavDumper
+    {
         public static bool PackSamplesToWav(WavData WavObject, string fileNameOut)
         {
             byte[] wavAsBytes = new byte[8 + WavObject.HeaderData["fileSize"]];
