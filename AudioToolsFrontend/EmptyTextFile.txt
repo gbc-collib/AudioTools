@@ -1,0 +1,23 @@
+﻿
+
+
+
+
+
+
+
+
+if (result != null)
+            {
+                string fileName = result.FullPath;
+                AudioFileData = FileHandler.HandleFileTypes(fileName);
+                Console.WriteLine("fileName");
+                var navigationParameter = new Dictionary<string, object>
+                {
+                    {"AudioObject", AudioFileData }
+                };
+                await Shell.Current.GoToAsync($"{nameof(PedalBoardView)}", navigationParameter);
+                Console.WriteLine($"{AudioFileData.FileName}");
+            }
+            Console.WriteLine("Twas null");
+            return;

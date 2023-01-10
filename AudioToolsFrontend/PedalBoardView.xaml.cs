@@ -1,3 +1,4 @@
+using AudioTools.AudioFileTools;
 using AudioToolsFrontend.ViewModel;
 
 namespace AudioToolsFrontend;
