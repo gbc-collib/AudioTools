@@ -1,7 +1,6 @@
 ﻿using AudioTools.AudioFileTools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HealthKit;
 
 namespace AudioToolsFrontend.ViewModel
 {
@@ -21,10 +20,10 @@ namespace AudioToolsFrontend.ViewModel
                 return;
             }
         }
-        public AsyncRelayCommand FilePickerCommand { get; set; }
+        public RelayCommand FilePickerCommand { get; set; }
         public MainPageViewModel()
         {
-            FilePickerCommand = new AsyncRelayCommand(FilePickerHandler);
+            FilePickerCommand = new RelayCommand(FilePickerHandler);
         }
 
         [RelayCommand]
@@ -32,7 +31,7 @@ namespace AudioToolsFrontend.ViewModel
         {
             await Shell.Current.GoToAsync($"{nameof(PedalBoardView)}");
         }
-        private async Task<FileResult> FilePickerHandler()
+        private async void FilePickerHandler()
         {
             var customTypeList = new Dictionary<DevicePlatform, IEnumerable<string>>()
             {
@@ -52,12 +51,6 @@ namespace AudioToolsFrontend.ViewModel
             {
                 string fileName = result.FullPath;
                 AudioFileData = FileHandler.HandleFileTypes(fileName);
-                Console.WriteLine($"{AudioFileData.FileName}");
-            }
-            if (result != null)
-            {
-                string fileName = result.FullPath;
-                AudioFileData = FileHandler.HandleFileTypes(fileName);
                 Console.WriteLine("fileName");
                 var navigationParameter = new Dictionary<string, object>
                 {
@@ -67,7 +60,7 @@ namespace AudioToolsFrontend.ViewModel
                 Console.WriteLine($"{AudioFileData.FileName}");
             }
             Console.WriteLine("Twas null");
-            return result;
+            return;
         }
     }
 }

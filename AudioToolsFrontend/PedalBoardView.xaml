@@ -17,10 +17,11 @@
                        HeightRequest="300"
                        HorizontalOptions="Center"
                        VerticalOptions="CenterAndExpand">
-                    <StackLayout>
+                        <StackLayout>
                             <Label Text="{Binding AudioObject.FileName}"
                                 />
-                    </StackLayout>
+                            <Label Text="Test"/>
+                        </StackLayout>
                 </Frame>
             </StackLayout>
         </DataTemplate>

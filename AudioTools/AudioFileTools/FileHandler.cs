@@ -20,13 +20,14 @@ namespace AudioTools.AudioFileTools
 
             switch (fileType)
             {
-                case "Wave":
+                case ".wav":
                     {
                         Wav.WavData fileData = new(filePath);
                         return fileData;
                     }
                 default:
                     {
+                        Console.WriteLine(fileType);
                         throw new NotImplementedException();
                     }
             }
