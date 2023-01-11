@@ -1,30 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AudioToolsFrontend.PedalBoardView"
              Title="PedalBoardView"
              xmlns:viewmodel="clr-namespace:AudioToolsFrontend.ViewModel"
-             x:DataType="viewmodel:PedalBoardViewModel">
+             x:Class="AudioToolsFrontend.PedalBoardView"
+             x:DataType="viewmodel:PedalBoardViewModel"
+             xmlns:templates="clr-namespace:AudioToolsFrontend">
 
- <CarouselView>
-    <CarouselView.ItemTemplate>
-        <DataTemplate>
-            <StackLayout>
-                <Frame HasShadow="True"
-                       BorderColor="DarkGray"
-                       CornerRadius="5"
-                       Margin="20"
-                       HeightRequest="300"
-                       HorizontalOptions="Center"
-                       VerticalOptions="CenterAndExpand">
-                        <StackLayout>
-                            <Label Text="{Binding AudioObject.FileName}"
-                                />
-                            <Label Text="Test"/>
-                        </StackLayout>
-                </Frame>
-            </StackLayout>
-        </DataTemplate>
-    </CarouselView.ItemTemplate>
-</CarouselView>
+    <ListView x:Name="lv" ItemsSource="{Binding Pedals}" SelectedItem="{Binding SelectedPedal, Mode=TwoWay}">
+        <ListView.ItemTemplate>
+            <templates:PedalDataTemplateSelector>
+                <templates:PedalDataTemplateSelector.ReverbPedalTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding SelectedPedal.Delay}"/>
+                                <Slider Value="{Binding SelectedPedal.Delay}" Minimum="0" Maximum="1" />
+                                <Label Text="{Binding SelectedPedal.Decay}" />
+                                <Slider Value="{Binding SelectedPedal.Decay}" Minimum="0" Maximum="1" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </templates:PedalDataTemplateSelector.ReverbPedalTemplate>
+            </templates:PedalDataTemplateSelector>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentPage>
