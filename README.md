@@ -1,5 +1,5 @@
 ### AudioTools
-## A C# library for loading audiofiles, converting their bitrates, and applying effects to them. The library is organized sub-directories for seperate functions for reading, saving, and editing wav files
+## A C# library for loading audiofiles, converting their bitrates, and applying effects to them. The library is organized sub-directories for seperate functions for reading, saving, and editing wav files. Currently my development time is being focused on designing a scalable GUI for the two types of audio effects currently implemented that will allow users to arrange pedals in any way they desire and hear the changes on the fly. After this GUi framework is built focus will return to expanding the list of effects availiable.
 
 ## OverDrive Distortion Process
 # AmplifySignal: 
