@@ -20,6 +20,8 @@ namespace AudioToolsFrontend
 
             builder.Services.AddTransient<PedalBoardView>();
             builder.Services.AddTransient<PedalBoardViewModel>();
+            //Create our mediator that ALL viewmodels will use to communicate and ensure it only ever has one instance
+            builder.Services.AddSingleton<Mediator>();
 
             return builder.Build();
         }

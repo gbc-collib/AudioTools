@@ -1,60 +1,45 @@
 ﻿using AudioTools.AudioFileTools;
+using AudioTools.EditingTools;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using System.Diagnostics;
-
 namespace AudioToolsFrontend.ViewModel
 {
+    
     public partial class PedalBoardViewModel : ObservableObject
     {
         public IAudioData AudioObject { get; set; }
-        //This collection will hold dataclass that represent parameters for the sound effects and have bindable properties to control their outputs
-        public ObservableCollection<object> Pedals { get; private set; }
+        //This collection will hold our objects that represent parameters for the sound effects and have bindable properties to control their outputs
+        public ObservableCollection<IPedal> Pedals { get; private set; } = new ObservableCollection<IPedal>();
+        [ObservableProperty]
+        private IPedal _selectedPedal;
 
-        private object selectedPedal;
-        public object SelectedPedal
-        {
-            get => selectedPedal;
-            set
-            {
-                selectedPedal = value;
-                OnPropertyChanged(nameof(SelectedPedal));
-            }
-        }
-        public PedalBoardViewModel()
+        private Mediator _mediator;
+        public PedalBoardViewModel(Mediator mediator)
         {
             AddPedal();
+            _mediator = mediator;
+            _mediator.Register<IAudioData>(HandleMyMessage);
+        }
+        private void HandleMyMessage(IAudioData message)
+        {
+            AudioObject = message;
+            Console.WriteLine(AudioObject.FileName);
         }
         public void AddPedal()
         {
-            var newReverb = new ReverbPedal();
-            Pedals.Add(newReverb);
+            ObservableSchroederReverb BasePedalAsObservable = new(AudioObject, 150f, 0.123f, 75f);
+            Pedals.Add(BasePedalAsObservable);
         }
-        public partial class ReverbPedal : ObservableObject
+
+    }
+    [ObservableObject]
+    public partial class ObservableSchroederReverb : SchroederReverb
+    {
+        [ObservableProperty]
+        private Dictionary<string, float> _parameters;
+        public ObservableSchroederReverb(IAudioData audioFile, float delay, float decay, float mixPercent) : base(audioFile, delay, decay, mixPercent)
         {
-            [ObservableProperty]
-            private float delay;
-            partial void OnDelayChanged(float value)
-            {
-                Debug.WriteLine(value);
-            }
-
-            [ObservableProperty]
-            private float decay;
-
-            [ObservableProperty]
-            private int mixPercent;
-            public ReverbPedal() 
-            {
-                delay = 0;
-                decay = 0;
-                mixPercent = 0;
-            }
+            _parameters = Parameters;
         }
     }
 }

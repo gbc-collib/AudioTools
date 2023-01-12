@@ -32,15 +32,15 @@ namespace AudioTools.EditingTools
 
         public DistortionPedal(IAudioData audioFile, float gain, float lowPassCutOff, float highPassCutOff)
         {
-            AudioFile = audioFile;
-            Gain = gain;
-            LowPassCutOff = lowPassCutOff;
-            HighPassCutOff = highPassCutOff;
             Parameters = new Dictionary<string, float>() {
             { "Gain", gain },
             { "LowPassCutOff", lowPassCutOff },
             { "HighPassCutOff", highPassCutOff }
         };
+            AudioFile = audioFile;
+            Gain = gain;
+            LowPassCutOff = lowPassCutOff;
+            HighPassCutOff = highPassCutOff;
         }
     }
 }

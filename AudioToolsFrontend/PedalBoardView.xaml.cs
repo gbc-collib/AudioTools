@@ -1,17 +1,17 @@
-using AudioTools.AudioFileTools;
 using AudioToolsFrontend.ViewModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
+using AudioTools.AudioFileTools;
+using AudioTools.EditingTools;
+using System.Runtime.InteropServices.ObjectiveC;
 
 namespace AudioToolsFrontend;
 
 public partial class PedalBoardView : ContentPage
 {
-	public PedalBoardView(PedalBoardViewModel vm)
-	{
-		InitializeComponent();
-		BindingContext = vm;
-	}
+    public PedalBoardView(PedalBoardViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
 }
 public class PedalDataTemplateSelector : DataTemplateSelector
 {
@@ -19,7 +19,7 @@ public class PedalDataTemplateSelector : DataTemplateSelector
 
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
     {
-        if (item is PedalBoardViewModel.ReverbPedal)
+        if (item is SchroederReverb)
         {
             return ReverbPedalTemplate;
         }

@@ -14,10 +14,8 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout>
-                                <Label Text="{Binding SelectedPedal.Delay}"/>
-                                <Slider Value="{Binding SelectedPedal.Delay}" Minimum="0" Maximum="1" />
-                                <Label Text="{Binding SelectedPedal.Decay}" />
-                                <Slider Value="{Binding SelectedPedal.Decay}" Minimum="0" Maximum="1" />
+                                <Label Text="{Binding .}" />
+                                <Slider Value="{Binding Path=SelectedPedal.Parameters}" Minimum="0" Maximum="1" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

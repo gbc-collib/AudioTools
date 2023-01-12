@@ -7,6 +7,7 @@ namespace AudioToolsFrontend.ViewModel
 
     public partial class MainPageViewModel : ObservableObject
     {
+        private Mediator _mediator;
         private IAudioData _audioFileData;
         public IAudioData AudioFileData
         {
@@ -21,9 +22,15 @@ namespace AudioToolsFrontend.ViewModel
             }
         }
         public RelayCommand FilePickerCommand { get; set; }
-        public MainPageViewModel()
+        public MainPageViewModel(Mediator mediator)
         {
+            _mediator = mediator;
+            _mediator.Register<IAudioData>(HandleMyMessage);
             FilePickerCommand = new RelayCommand(FilePickerHandler);
+        }
+        private void HandleMyMessage(IAudioData message)
+        {
+            AudioFileData = message;
         }
 
         [RelayCommand]
@@ -52,11 +59,9 @@ namespace AudioToolsFrontend.ViewModel
                 string fileName = result.FullPath;
                 AudioFileData = FileHandler.HandleFileTypes(fileName);
                 Console.WriteLine("fileName");
-                var navigationParameter = new Dictionary<string, object>
-                {
-                    {"AudioObject", AudioFileData }
-                };
-                await Shell.Current.GoToAsync($"{nameof(PedalBoardView)}", navigationParameter);
+                //Send our data through mediator before we change views
+                _mediator.Send(AudioFileData);
+                await Shell.Current.GoToAsync($"{nameof(PedalBoardView)}");
                 Console.WriteLine($"{AudioFileData.FileName}");
             }
             Console.WriteLine("Twas null");
