@@ -73,7 +73,7 @@ namespace AudioTools.EditingTools
         }
         /* we're gonna use this formula for sin wave modulation y(t) = A * sin(2 * pi * f * t + phi)
          * Where y(t) is an element of the audio sample array
-         * A is the max amplitude represented by the max value possible in int32
+         * A is the amplitude of our wave which in this instance will represent the 'detune' being applied to the signal
          * f is the frequency, To calculate the frequency value you need to use this formula: f = 1 / (sample rate / desired frequency(we call it rate)
          * T is the time measured in seconds so we can calculate this pretty easily by, t = sample index / sample rate
          * phi is not used in this instance so we'll just set it to 0

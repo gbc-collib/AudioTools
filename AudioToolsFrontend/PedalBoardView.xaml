@@ -6,20 +6,52 @@
              x:Class="AudioToolsFrontend.PedalBoardView"
              x:DataType="viewmodel:PedalBoardViewModel"
              xmlns:templates="clr-namespace:AudioToolsFrontend">
-
-    <ListView x:Name="lv" ItemsSource="{Binding Pedals}" SelectedItem="{Binding SelectedPedal, Mode=TwoWay}">
+    <ListView x:Name="listView" ItemsSource="{Binding Pedals}" SelectedItem="{Binding SelectedPedal, Mode=TwoWay}"  >
         <ListView.ItemTemplate>
             <templates:PedalDataTemplateSelector>
-                <templates:PedalDataTemplateSelector.ReverbPedalTemplate>
+                <templates:PedalDataTemplateSelector.SchroederReverbPedalTemplate BindingContext="{Binding .}">
                     <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
-                                <Label Text="{Binding .}" />
-                                <Slider Value="{Binding Path=SelectedPedal.Parameters}" Minimum="0" Maximum="1" />
+                        <ViewCell x:Name="parameterControls">
+                            <StackLayout Orientation="Vertical">
+                                <Label Text="Delay"/>
+                                <Slider x:Name="delaySlider" Value="{Binding .}" Minimum="0" Maximum="1500"/>
+                                <Label x:Name="delaySlidervalueLabel" Text="{Binding Value, Source={x:Reference delaySlider}, StringFormat='{0:F1}'}"/>
+                                <Label Text="{Binding .}"/>
+                                <Label Text="{Binding Path=item.ObservableParameters[Delay], Source={RelativeSource AncestorType={x:Type DataTemplate}}}"/>
+                                <Label Text="Decay"/>
+                                <Slider x:Name="decaySlider" Value="{Binding ObservableParameters[Decay], Source={x:Reference listView}}" Minimum="0" Maximum="1000"/>
+                                <Label x:Name="decaySlidervalueLabel" Text="{Binding Value, Source={x:Reference decaySlider}, StringFormat='{0:F1}'}"/>
+
+                                <Label Text="Mix %"/>
+                                <Slider x:Name="mixSlider" Value="{Binding ObservableParameters[MixPercent], Source={x:Reference listView}}" Minimum="0" Maximum="100"/>
+                                <Label x:Name="mixSlidervalueLabel" Text="{Binding Value, Source={x:Reference mixSlider}, StringFormat='{0:F1}'}"/>
+                                <Switch IsToggled="{Binding IsEnabled, Source={x:Reference listView}}" OnColor="Pink" ThumbColor="Purple"/>
+                                <Button Text="Print Debug" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:PedalBoardViewModel}}, Path=PrintDebugCommand}" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
-                </templates:PedalDataTemplateSelector.ReverbPedalTemplate>
+                </templates:PedalDataTemplateSelector.SchroederReverbPedalTemplate>
+                <templates:PedalDataTemplateSelector.OverDrivePedalTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout x:Name="parameterControls" Orientation="Vertical">
+                                <Button Text="Print Debug" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:PedalBoardViewModel}}, Path=PrintDebugCommand}" />
+                                <Label Text="Gain"/>
+                                <Slider x:Name="GainSlider" Value="{Binding SelectedItem.ObservableParameters[Gain], Source={x:Reference listView}}" Minimum="0" Maximum="1500"/>
+                                <Label Text="{Binding Value, Source={x:Reference GainSlider}, StringFormat='{0:F1}'}"/>
+
+                                <Label Text="LowPass CutOff Frequency"/>
+                                <Slider x:Name="LowPassCutOffSlider" Value="{Binding SelectedItem.ObservableParameters[LowPassCutOff], Source={x:Reference listView}}" Minimum="0" Maximum="1000"/>
+                                <Label Text="{Binding Value, Source={x:Reference LowPassCutOffSlider}, StringFormat='{0:F1}'}"/>
+
+                                <Label Text="HighPass CutOff Frequency"/>
+                                <Slider x:Name="HighPassCutOffSlider" Value="{Binding SelectedItem.ObservableParameters[HighPassCutOff], Source={x:Reference listView}}" Minimum="0" Maximum="100"/>
+                                <Label Text="{Binding Value, Source={x:Reference HighPassCutOffSlider}, StringFormat='{0:F1}'}"/>
+                                <Switch IsToggled="{Binding SelectedItem.IsEnabled, Source={x:Reference listView}}" OnColor="Red" ThumbColor="Black"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </templates:PedalDataTemplateSelector.OverDrivePedalTemplate>
             </templates:PedalDataTemplateSelector>
         </ListView.ItemTemplate>
     </ListView>

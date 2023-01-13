@@ -1,7 +1,7 @@
 using AudioToolsFrontend.ViewModel;
-using AudioTools.AudioFileTools;
 using AudioTools.EditingTools;
-using System.Runtime.InteropServices.ObjectiveC;
+using System.Diagnostics;
+using Microsoft.Maui.Controls;
 
 namespace AudioToolsFrontend;
 
@@ -12,18 +12,32 @@ public partial class PedalBoardView : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
+
+    private void mixSlider_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+
+    }
 }
 public class PedalDataTemplateSelector : DataTemplateSelector
 {
-    public DataTemplate ReverbPedalTemplate { get; set; }
+    public DataTemplate SchroederReverbPedalTemplate { get; set; }
+    public DataTemplate OverDrivePedalTemplate { get; set; }
 
     protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
     {
+        var viewCell = new ViewCell();
+
         if (item is SchroederReverb)
         {
-            return ReverbPedalTemplate;
+            return SchroederReverbPedalTemplate;
         }
-        // Other types of templates
+        else if (item is OverDriveDistortion)
+        {
+            viewCell.BindingContext = item;
+            return OverDrivePedalTemplate;
+        }
+
         return null;
     }
 }
+

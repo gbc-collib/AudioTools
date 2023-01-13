@@ -1,5 +1,4 @@
 ﻿using AudioToolsFrontend.ViewModel;
-
 namespace AudioToolsFrontend
 {
     public static class MauiProgram
@@ -18,8 +17,8 @@ namespace AudioToolsFrontend
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<MainPageViewModel>();
 
-            builder.Services.AddTransient<PedalBoardView>();
-            builder.Services.AddTransient<PedalBoardViewModel>();
+            builder.Services.AddSingleton<PedalBoardView>();
+            builder.Services.AddSingleton<PedalBoardViewModel>();
             //Create our mediator that ALL viewmodels will use to communicate and ensure it only ever has one instance
             builder.Services.AddSingleton<Mediator>();
 
