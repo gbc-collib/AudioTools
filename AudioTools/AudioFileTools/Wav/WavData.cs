@@ -39,7 +39,7 @@
          * If Another file needs to load create a new instance of the class */
         public bool LoadFile()
         {
-            WavReader.LoadWav(this);
+            return WavReader.LoadWav(this);
         }
         public void SaveFile(string fileOut)
         {
@@ -47,9 +47,7 @@
         }
         public bool ToBytes(out byte[] samplesAsByteArray)
         {
-            if(WavDumper.SampleArrayToBytes(this, out samplesAsByteArray) != true)
-            { return false; }
-            return true;
+            return WavDumper.SampleArrayToBytes(this, out samplesAsByteArray);
         }
     }
 }
