@@ -37,13 +37,19 @@
         /*Calls function from WAV utilities folder to keep file nice and short
          * LoadFile is protected because this method should only be called once when the object is initialized
          * If Another file needs to load create a new instance of the class */
-        protected void LoadFile()
+        public bool LoadFile()
         {
             WavReader.LoadWav(this);
         }
-        public void SaveFile(string fileout)
+        public void SaveFile(string fileOut)
         {
-            WavDumper.PackSamplesToWav(this, fileout);
+            WavDumper.PackSamplesToWav(this, fileOut);
+        }
+        public bool ToBytes(out byte[] samplesAsByteArray)
+        {
+            if(WavDumper.SampleArrayToBytes(this, out samplesAsByteArray) != true)
+            { return false; }
+            return true;
         }
     }
 }

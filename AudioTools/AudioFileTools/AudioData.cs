@@ -9,6 +9,9 @@
         public int SampleLength { get; set; }
         public float[] Samples { get; set; }
         public string FileType { get; set; }
+        public bool LoadFile();
+        public void SaveFile(string fileOut);
+        public bool ToBytes(out byte[] samplesAsByteArray);
     }
 }
 

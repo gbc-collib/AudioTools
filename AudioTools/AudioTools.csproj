@@ -9,5 +9,7 @@
 
   <ItemGroup>
     <None Remove="codecracker.CSharp" />
+    <None Remove="portaudio" />
+    <None Remove="CSCore" />
   </ItemGroup>
 </Project>
