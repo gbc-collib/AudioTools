@@ -11,10 +11,9 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <Button x:Name="switchView"
-                    Text="Switch me"
-                    Command = "{Binding Source={RelativeSource AncestorType={x:Type viewmodel:MainPageViewModel}}, Path=ButtonCommand}"
-                    CommandParameter = "{Binding .}"/>
+            <Button x:Name="switchViewButton"
+                    Text="Debug Button"
+                    Command = "{Binding DebugButtonCommand}"/>
 
             <Label
                 Text="Hello, World!"

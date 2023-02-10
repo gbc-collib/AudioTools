@@ -1,4 +1,5 @@
-﻿using AudioTools.AudioFileTools;
+﻿using System.Diagnostics;
+using AudioTools.AudioFileTools;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -7,8 +8,8 @@ namespace AudioToolsFrontend.ViewModel
 
     public partial class MainPageViewModel : ObservableObject
     {
-        private Mediator _mediator;
-        private IAudioData _audioFileData;
+        protected Mediator _mediator;
+        protected IAudioData _audioFileData;
         public IAudioData AudioFileData
         {
             get { return _audioFileData; }
@@ -22,10 +23,12 @@ namespace AudioToolsFrontend.ViewModel
             }
         }
         public RelayCommand FilePickerCommand { get; set; }
+        public RelayCommand DebugButtonCommand { get; set; }
         public MainPageViewModel(Mediator mediator)
         {
             _mediator = mediator;
             _mediator.Register<IAudioData>(HandleMyMessage);
+            DebugButtonCommand = new RelayCommand(DebugButton);
             FilePickerCommand = new RelayCommand(FilePickerHandler);
         }
         private void HandleMyMessage(IAudioData message)
@@ -33,11 +36,14 @@ namespace AudioToolsFrontend.ViewModel
             AudioFileData = message;
         }
 
-        [RelayCommand]
-        public async Task Button()
+        private async void DebugButton()
         {
+            AudioFileData = FileHandler.HandleFileTypes("Users/collinstasisk/Documents/GitHub/AudioTools/AudioTools/TestAudioFiles");
+            _mediator.Send(AudioFileData);
+            Debug.WriteLine($"Sending {AudioFileData.FileName} To next view");
             await Shell.Current.GoToAsync($"{nameof(PedalBoardView)}");
         }
+
         private async void FilePickerHandler()
         {
             var customTypeList = new Dictionary<DevicePlatform, IEnumerable<string>>()
@@ -64,7 +70,6 @@ namespace AudioToolsFrontend.ViewModel
                 await Shell.Current.GoToAsync($"{nameof(PedalBoardView)}");
                 Console.WriteLine($"{AudioFileData.FileName}");
             }
-            Console.WriteLine("Twas null");
             return;
         }
     }

@@ -1,7 +1,5 @@
 using AudioToolsFrontend.ViewModel;
 using AudioTools.EditingTools;
-using System.Diagnostics;
-using Microsoft.Maui.Controls;
 
 namespace AudioToolsFrontend;
 
